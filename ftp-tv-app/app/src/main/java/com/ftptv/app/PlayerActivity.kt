@@ -115,7 +115,7 @@ class PlayerActivity : AppCompatActivity() {
                 if (state == Player.STATE_ENDED) finish()
             }
             override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
-                if (retryCount < 1 && channelUrls.size > 1) {
+                if (retryCount < 1) {
                     retryCount++
                     player?.stop()
                     player?.clearMediaItems()
@@ -179,7 +179,12 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        player?.play()
+        player?.let { p ->
+            when (p.playbackState) {
+                Player.STATE_IDLE, Player.STATE_ENDED -> playChannel(currentIndex)
+                else -> p.play()
+            }
+        }
     }
 
     override fun onDestroy() {

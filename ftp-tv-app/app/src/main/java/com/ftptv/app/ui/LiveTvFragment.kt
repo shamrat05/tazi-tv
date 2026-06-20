@@ -95,6 +95,11 @@ class LiveTvFragment : Fragment() {
             }
             result.onSuccess { channels ->
                 allChannels = channels
+                if (channels.isEmpty()) {
+                    emptyText.visibility = View.VISIBLE
+                    emptyText.text = getString(R.string.no_channels)
+                    return@launch
+                }
                 emptyText.visibility = View.GONE
                 val hasFavs = prefs.getFavorites().any { url ->
                     channels.any { it.streamUrl == url }

@@ -5,4 +5,5 @@
     <string name="player_description">Video player</string>
     <string name="channel_pinned">Pinned</string>
     <string name="channel_unpinned">Unpinned</string>
+    <string name="no_channels">No channels found</string>
 </resources>
