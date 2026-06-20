@@ -60,7 +60,8 @@ class LiveTvFragment : Fragment() {
                         idx
                     ))
                 }
-            }
+            },
+            onFavoritesChanged = { rebuildCategories() }
         )
         channelAdapter.categoryRowId = R.id.categoryList
         channelGrid.layoutManager = GridLayoutManager(context, 3)
@@ -101,16 +102,7 @@ class LiveTvFragment : Fragment() {
                     return@launch
                 }
                 emptyText.visibility = View.GONE
-                val hasFavs = prefs.getFavorites().any { url ->
-                    channels.any { it.streamUrl == url }
-                }
-                val categories = buildList {
-                    if (hasFavs) add("FAVORITES")
-                    add("ALL")
-                    addAll(channels.map { it.category }.distinct())
-                }
-                categoryAdapter.submitList(categories)
-                filterChannels()
+                rebuildCategories()
             }.onFailure { e ->
                 if (allChannels.isEmpty()) {
                     emptyText.visibility = View.VISIBLE
@@ -118,6 +110,23 @@ class LiveTvFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun rebuildCategories() {
+        val hasFavs = prefs.getFavorites().any { url ->
+            allChannels.any { it.streamUrl == url }
+        }
+        if (activeCategory == "FAVORITES" && !hasFavs) {
+            activeCategory = "ALL"
+        }
+        val categories = buildList {
+            if (hasFavs) add("FAVORITES")
+            add("ALL")
+            addAll(allChannels.map { it.category }.distinct())
+        }
+        categoryAdapter.submitList(categories)
+        categoryAdapter.setSelectedCategory(activeCategory)
+        filterChannels()
     }
 
     private fun filterChannels() {
@@ -136,7 +145,8 @@ class LiveTvFragment : Fragment() {
 class ChannelAdapter(
     private val prefs: Preferences,
     private val scope: kotlinx.coroutines.CoroutineScope,
-    private val onClick: (Channel) -> Unit
+    private val onClick: (Channel) -> Unit,
+    private val onFavoritesChanged: () -> Unit
 ) : RecyclerView.Adapter<ChannelAdapter.ViewHolder>() {
 
     var currentChannels: List<Channel> = emptyList()
@@ -180,6 +190,7 @@ class ChannelAdapter(
             val nowFav = prefs.toggleFavorite(channel.streamUrl)
             val resId = if (nowFav) R.string.channel_pinned else R.string.channel_unpinned
             Toast.makeText(holder.itemView.context, resId, Toast.LENGTH_SHORT).show()
+            onFavoritesChanged()
             true
         }
 
@@ -235,6 +246,16 @@ class CategoryAdapter(
 
     private var categories: List<String> = emptyList()
     private var selectedPosition = 0
+
+    fun setSelectedCategory(category: String) {
+        val newPos = categories.indexOf(category)
+        if (newPos >= 0 && newPos != selectedPosition) {
+            val prev = selectedPosition
+            selectedPosition = newPos
+            notifyItemChanged(prev)
+            notifyItemChanged(newPos)
+        }
+    }
 
     fun submitList(list: List<String>) {
         categories = list
