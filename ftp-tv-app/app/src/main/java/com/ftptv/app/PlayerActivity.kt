@@ -84,11 +84,12 @@ class PlayerActivity : AppCompatActivity() {
 
         val cacheDir = File(cacheDir, "media3-cache")
         val evictor = LeastRecentlyUsedCacheEvictor(20 * 1024 * 1024)
-        simpleCache = SimpleCache(cacheDir, evictor)
+        val cache = SimpleCache(cacheDir, evictor)
+        simpleCache = cache
 
         val httpDataSourceFactory = DefaultHttpDataSource.Factory()
         val cacheDataSourceFactory = CacheDataSource.Factory()
-            .setCache(simpleCache!!)
+            .setCache(cache)
             .setUpstreamDataSourceFactory(httpDataSourceFactory)
             .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
 
@@ -162,12 +163,13 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun playChannel(index: Int) {
-        if (player == null) return
-        player!!.stop()
-        player!!.clearMediaItems()
-        player!!.setMediaItem(MediaItem.fromUri(Uri.parse(channelUrls[index])))
-        player!!.prepare()
-        player!!.play()
+        player?.let { p ->
+            p.stop()
+            p.clearMediaItems()
+            p.setMediaItem(MediaItem.fromUri(Uri.parse(channelUrls[index])))
+            p.prepare()
+            p.play()
+        }
     }
 
     override fun onPause() {

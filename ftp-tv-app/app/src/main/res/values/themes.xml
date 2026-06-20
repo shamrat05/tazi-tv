@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.FtpTv" parent="Theme.AppCompat.NoActionBar">
+    <style name="Theme.TaziTv" parent="Theme.AppCompat.NoActionBar">
         <item name="android:colorBackground">#FF0F0F0F</item>
         <item name="android:statusBarColor">#FF0F0F0F</item>
         <item name="android:navigationBarColor">#FF0F0F0F</item>

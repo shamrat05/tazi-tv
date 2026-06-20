@@ -36,12 +36,13 @@ class LiveTvFragment : Fragment() {
     private lateinit var channelAdapter: ChannelAdapter
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var prefs: Preferences
+    private lateinit var emptyText: TextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.fragment_live_tv, container, false)
         prefs = Preferences(requireContext())
 
-        val emptyText = view.findViewById<TextView>(R.id.emptyText)
+        emptyText = view.findViewById(R.id.emptyText)
         val channelGrid = view.findViewById<RecyclerView>(R.id.channelGrid)
         val categoryList = view.findViewById<RecyclerView>(R.id.categoryList)
 
@@ -75,6 +76,19 @@ class LiveTvFragment : Fragment() {
         emptyText.visibility = View.VISIBLE
         emptyText.text = getString(R.string.loading)
 
+        fetchChannels()
+
+        return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (::emptyText.isInitialized && allChannels.isNotEmpty()) {
+            fetchChannels()
+        }
+    }
+
+    private fun fetchChannels() {
         viewLifecycleOwner.lifecycleScope.launch {
             val result = withContext(Dispatchers.IO) {
                 ChannelFetcher(prefs.server, prefs.port).fetch()
@@ -93,12 +107,12 @@ class LiveTvFragment : Fragment() {
                 categoryAdapter.submitList(categories)
                 filterChannels()
             }.onFailure { e ->
-                emptyText.visibility = View.VISIBLE
-                emptyText.text = "Failed: ${e.message}"
+                if (allChannels.isEmpty()) {
+                    emptyText.visibility = View.VISIBLE
+                    emptyText.text = "Failed: ${e.message}"
+                }
             }
         }
-
-        return view
     }
 
     private fun filterChannels() {
