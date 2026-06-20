@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.FtpTv" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:colorBackground">#FF0F0F0F</item>
+        <item name="android:statusBarColor">#FF0F0F0F</item>
+        <item name="android:navigationBarColor">#FF0F0F0F</item>
+        <item name="colorPrimary">#FFE50914</item>
+        <item name="colorPrimaryDark">#FFB81D24</item>
+        <item name="android:windowBackground">@color/background</item>
+    </style>
+
+    <style name="CardBackground">
+        <item name="android:background">#FF1A1A2E</item>
+    </style>
+
+    <style name="CardBackground.Focused">
+        <item name="android:background">#FF2A2A4E</item>
+    </style>
+</resources>

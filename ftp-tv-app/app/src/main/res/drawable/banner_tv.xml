@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="180dp"
+    android:viewportWidth="320"
+    android:viewportHeight="180">
+    <path
+        android:fillColor="#FF0F0F0F"
+        android:pathData="M0,0h320v180h-320z" />
+    <path
+        android:fillColor="#FFE50914"
+        android:pathData="M0,0h320v4h-320z" />
+    <path
+        android:fillColor="#FFE50914"
+        android:pathData="M0,176h320v4h-320z" />
+    <!-- TV icon on the left -->
+    <path
+        android:pathData="M40,55 L74,55 Q78,55 78,59 L78,88 Q78,92 74,92 L40,92 Q36,92 36,88 L36,59 Q36,55 40,55 Z"
+        android:strokeWidth="2"
+        android:strokeColor="#FFFFFF" />
+    <!-- Antenna -->
+    <path
+        android:pathData="M57,55 L57,43 M57,43 L48,37 M57,43 L66,37"
+        android:strokeWidth="2"
+        android:strokeColor="#FFFFFF" />
+    <!-- Play triangle -->
+    <path
+        android:pathData="M47,64 L47,83 L66,73.5 Z"
+        android:fillColor="#FFE50914" />
+    <!-- Brand pill -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M120,55 L305,55 L305,92 L120,92 Z"
+        android:fillAlpha="0.08" />
+</vector>

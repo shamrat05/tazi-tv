@@ -1,0 +1,3 @@
+-keep class androidx.media3.** { *; }
+-keep class com.ftptv.app.** { *; }
+-dontwarn androidx.media3.**
